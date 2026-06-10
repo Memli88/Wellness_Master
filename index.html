@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>کتابچه جامع سلامت تغذیه</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#07090d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="سلامت تغذیه">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<style>
+/* ══════════ RESET & VARS (iOS Optimized) ══════════ */
+:root{
+  --bg:#07090d;--s1:#0b0f17;--s2:#0f1520;--s3:#141c2c;
+  --border:#1c2638;--border2:#273448;
+  --g1:#4ade80;--g2:#86efac;--g3:#bbf7d0;
+  --gold:#fbbf24;--gold2:#fde68a;
+  --blue:#60a5fa;--blue2:#93c5fd;
+  --red:#f87171;--orange:#fb923c;
+  --purple:#c084fc;--pink:#f472b6;
+  --teal:#2dd4bf;--cyan:#22d3ee;
+  --warm:#f97316;--indigo:#818cf8;
+  --text:#e8eeff;--muted:#4a5878;--muted2:#2e3a52;
+  --nav-h:64px;
+  --tab-bar-h:65px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Vazirmatn',sans-serif;
+  min-height:100vh;overflow-x:hidden;padding-bottom:calc(var(--tab-bar-h) + env(safe-area-inset-bottom) + 20px);
+  background-image:radial-gradient(ellipse at 15% 5%,rgba(74,222,128,.05) 0%,transparent 50%),
+  radial-gradient(ellipse at 85% 95%,rgba(129,140,248,.04) 0%,transparent 50%);
+  -webkit-user-select:none;user-select:none;}
+
+/* ══════════ iOS TOP NAV ══════════ */
+.topnav{
+  position:fixed;top:0;right:0;left:0;z-index:200;
+  height:var(--nav-h);padding-top:env(safe-area-inset-top);
+  background:rgba(7,9,13,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding-right:16px;padding-left:16px;gap:12px;
+}
+.app-logo{
+  font-size:14px;font-weight:900;
+  background:linear-gradient(135deg,#4ade80,#818cf8,#f472b6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  white-space:nowrap;flex-shrink:0;
+}
+
+/* ══════════ SEARCH SYSTEM ══════════ */
+.search-wrap{flex:1;position:relative;}
+.search-input{
+  width:100%;background:var(--s2);
+  border:1px solid var(--border2);border-radius:12px;
+  padding:8px 12px 8px(40px);font-family:'Vazirmatn',sans-serif;
+  font-size:13px;color:var(--text);outline:none;
+  transition:all .25s cubic-bezier(0.4, 0, 0.2, 1);direction:rtl;
+}
+.search-input:focus{border-color:var(--g1);background:var(--s3);box-shadow:0 0 0 3px rgba(74,222,128,.1);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none;}
+.search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;display:none;padding:2px;}
+
+/* ══════════ iOS STICKY BOTTOM TAB BAR ══════════ */
+.tab-bar{
+  position:fixed;bottom:0;right:0;left:0;z-index:200;
+  height:calc(var(--tab-bar-h) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  background:rgba(11,15,23,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;align-items:center;
+}
+.tab-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;height:100%;background:none;border:none;cursor:pointer;
+  color:var(--muted);font-family:'Vazirmatn',sans-serif;
+  transition:all(0.2s);gap:4px;
+}
+.tab-btn .tab-icon{font-size:20px;transition:transform 0.2s;}
+.tab-btn .tab-label{font-size:10px;font-weight:600;}
+.tab-btn.active{color:var(--g1);}
+.tab-btn.active .tab-icon{transform:scale(1.1);}
+
+/* ══════════ CONTENT & PANELS ══════════ */
+.content-wrap{
+  padding-top:calc(var(--nav-h) + 16px);
+  max-width:800px;margin:0 auto;padding-right:16px;padding-left:16px;
+}
+.tab-panel{display:none;animation:fadeIn 0.35s ease-out;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════ SUB NAVIGATION (STIKCY) ══════════ */
+.section-nav{
+  display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+  padding:12px 0;margin-bottom:16px;position:sticky;top:var(--nav-h);
+  background:var(--bg);z-index:100;
+}
+.section-nav::-webkit-scrollbar{display:none;}
+.snav-btn{
+  font-family:'Vazirmatn',sans-serif;font-size:11px;font-weight:600;
+  padding:6px 14px;border-radius:20px;background:var(--s1);
+  border:1px solid var(--border);color:var(--muted);cursor:pointer;
+  white-space:nowrap;transition:all 0.2s;
+}
+.snav-btn.active, .snav-btn:hover{background:rgba(74,222,128,.1);color:var(--g1);border-color:rgba(74,222,128,.3);}
+
+/* ══════════ DIVIDER ══════════ */
+.divider{display:flex;align-items:center;gap:12px;margin:32px 0 16px;}
+.divider-line{flex:1;height:1px;background:var(--border);}
+.divider-label{background:var(--s2);border:1px solid var(--border2);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;}
+
+/* ══════════ CARD COMPONENT ══════════ */
+.card{-webkit-user-select:text;user-select:text;background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;transition:all 0.25s;}
+.card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.card::after{content:'';position:absolute;top:0;right:0;width:100%;height:3px;}
+.card.green::after{background:linear-gradient(to left,transparent,var(--g1));}
+.card.gold::after{background:linear-gradient(to left,transparent,var(--gold));}
+.card.blue::after{background:linear-gradient(to left,transparent,var(--blue));}
+.card.red::after{background:linear-gradient(to left,transparent,var(--red));}
+.card.purple::after{background:linear-gradient(to left,transparent,var(--purple));}
+.card.teal::after{background:linear-gradient(to left,transparent,var(--teal));}
+.card.cool::after{background:linear-gradient(to left,transparent,#38bdf8);}
+.card.neutral-card::after{background:linear-gradient(to left,transparent,#737373);}
+
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.card-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.card.green .card-icon{background:rgba(74,222,128,.1);}
+.card.gold  .card-icon{background:rgba(251,191,36,.1);}
+.card.blue  .card-icon{background:rgba(96,165,250,.1);}
+.card.red   .card-icon{background:rgba(248,113,113,.1);}
+.card.purple .card-icon{background:rgba(192,132,252,.1);}
+.card.teal  .card-icon{background:rgba(45,212,191,.1);}
+.card.cool  .card-icon{background:rgba(56,189,248,.1);}
+.card.neutral-card .card-icon{background:rgba(163,163,163,.1);}
+
+.card-title{font-size:15px;font-weight:700;}
+.card.green .card-title{color:var(--g1);}
+.card.gold  .card-title{color:var(--gold);}
+.card.blue  .card-title{color:var(--blue);}
+.card.red   .card-title{color:var(--red);}
+.card.purple .card-title{color:var(--purple);}
+.card.teal  .card-title{color:var(--teal);}
+.card.cool  .card-title{color:#38bdf8;}
+.card.neutral-card .card-title{color:#d4d4d4;}
+.card-subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ══════════ RECIPE & LISTS ══════════ */
+.recipe{background:rgba(0,0,0,.2);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:12px;}
+.recipe-title{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ing-list, .ingredient-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.ing-list li, .ingredient-list li{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.5;}
+.ing-list li::before, .ingredient-list li::before{content:'◆';font-size:8px;color:var(--g1);margin-top:5px;flex-shrink:0;}
+.ing-name{font-weight:700;min-width:120px;color:var(--text);}
+.ing-note{color:var(--muted);font-weight:400;}
+
+/* ══════════ STEPS SYSTEM ══════════ */
+.steps{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.step{display:flex;align-items:flex-start;gap:12px;font-size:13px;line-height:1.6;}
+.step-num{width:24px;height:24px;border-radius:50%;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);color:var(--g1);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ══════════ TABLES (iOS Style) ══════════ */
+.comp-table, .tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;border-radius:12px;overflow:hidden;}
+.comp-table th, .tbl th{background:var(--s2);color:var(--text);font-weight:700;padding:10px 12px;text-align:right;border-bottom:1px solid var(--border);}
+.comp-table td, .tbl td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6;background:var(--s1);}
+.comp-table tr:last-child td, .tbl tr:last-child td{border-bottom:none;}
+.good{color:var(--g1);font-weight:700;}
+.bad{color:var(--red);font-weight:700;}
+.neutral{color:var(--gold);font-weight:700;}
+.warm-text{color:var(--warm);font-weight:700;}
+.cool-text{color:#38bdf8;font-weight:700;}
+.neut-text{color:#a3a3a3;font-weight:700;}
+
+/* ══════════ BADGES & PILLS ══════════ */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.tag{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;display:inline-block;}
+.tag-g{background:rgba(74,222,128,.1);color:var(--g1);border:1px solid rgba(74,222,128,.15);}
+.tag-r{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.15);}
+.tag-gold{background:rgba(251,191,36,.1);color:var(--gold);border:1px solid rgba(251,191,36,.15);}
+.tag-b{background:rgba(96,165,250,.1);color:var(--blue);border:1px solid rgba(96,165,250,.15);}
+.tag-p{background:rgba(192,132,252,.1);color:var(--purple);border:1px solid rgba(192,132,252,.15);}
+
+.vpill{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:6px;font-weight:700;margin:2px 0;}
+.vA{background:rgba(251,146,60,.15);color:var(--orange);}
+.vB{background:rgba(129,140,248,.15);color:var(--indigo);}
+.vC{background:rgba(251,191,36,.15);color:var(--gold);}
+.vMin{background:rgba(192,132,252,.15);color:var(--purple);}
+
+/* ══════════ SPICE & FRUIT GRIDS ══════════ */
+.spice-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:10px;}
+.fruit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:10px;}
+.fruit-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:12px;position:relative;overflow:hidden;}
+.fruit-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;}
+.fruit-card.w::before{background:var(--warm);}
+.fruit-card.c::before{background:#38bdf8;}
+.fruit-card.n::before{background:#737373;}
+.fruit-emoji{font-size:24px;margin-bottom:6px;display:block;}
+.fruit-name{font-size:13px;font-weight:700;margin-bottom:4px;}
+.fruit-ph{font-size:11px;font-weight:700;padding:2px 6px;border-radius:6px;display:inline-block;margin-bottom:6px;}
+.fruit-card.w .fruit-ph{background:rgba(249,115,22,.1);color:var(--warm);}
+.fruit-card.c .fruit-ph{background:rgba(56,189,248,.1);color:#38bdf8;}
+.fruit-card.n .fruit-ph{background:rgba(163,163,163,.1);color:#d4d4d4;}
+.fruit-note{font-size:11px;color:var(--muted);line-height:1.4;}
+.fruit-best{font-size:11px;color:var(--g2);font-weight:600;margin-top:6px;}
+
+/* ══════════ TIMELINE SYSTEM ══════════ */
+.timeline{display:flex;flex-direction:column;margin-top:10px;}
+.tl-item{display:flex;gap:14px;position:relative;}
+.tl-item:not(:last-child)::before{content:'';position:absolute;right:15px;top:32px;width:1px;height:calc(100% - 14px);background:var(--border2);}
+.tl-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:14px;z-index:1;flex-shrink:0;}
+.tl-content{padding:4px 0 16px;flex:1;}
+.tl-time{font-size:11px;color:var(--g1);font-weight:700;margin-bottom:4px;}
+.tl-desc{font-size:13px;line-height:1.5;}
+
+/* ══════════ ALERTS ══════════ */
+.alert{border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px;display:flex;gap:10px;align-items:flex-start;}
+.alert-g{background:rgba(74,222,128,.05);border:1px solid rgba(74,222,128,.15);color:var(--g2);}
+.alert-r{background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);color:#fca5a5;}
+.alert-gold{background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.15);color:var(--gold2);}
+.alert-p{background:rgba(192,132,252,.05);border:1px solid rgba(192,132,252,.15);color:#e9d5ff;}
+
+/* Search Highlight Modifiers */
+.search-mode-active .card, .search-mode-active .fruit-card {display:none;}
+.search-mode-active .search-hit {display:block !important;}
+
+@media(max-width:600px){
+  .spice-grid{grid-template-columns:1fr;}
+  .fruit-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="app-logo">🌿 SMART WELLNESS</div>
+  <div class="search-wrap">
+    <input class="search-input" type="text" placeholder="جستجو در تمام کارت‌ها، ویتامین‌ها و مصلحات...">
+    <span class="search-icon">🔍</span>
+    <button class="search-clear" id="clearBtn">✕</button>
+  </div>
+</nav>
+
+<div class="content-wrap">
+
+  <div class="tab-panel active" id="t1">
+    <div class="section-nav">
+      <button class="snav-btn" onclick="document.getElementById('sec-morning').scrollIntoView({behavior:'smooth'})">🌅 اول صبح</button>
+      <button class="snav-btn" onclick="document.getElementById('sec-electrolyte').scrollIntoView({behavior:'smooth'})">💧 الکترولیت</button>
+      <button class="snav-btn" onclick="document.getElementById('sec-baking').scrollIntoView({behavior:'smooth'})">🫧 سرکه و جوش شیرین</button>
+      <button class="snav-btn" onclick="document.getElementById('sec-eggs').scrollIntoView({behavior:'smooth'})">🍳 پروتئین پایه</button>
+      <button class="snav-btn" onclick="document.getElementById('sec-interstitium').scrollIntoView({behavior:'smooth'})">🧬 مایع بافتی</button>
+      <button class="snav-btn" onclick="document.getElementById('sec-pollen').scrollIntoView({behavior:'smooth'})">🐝 گرده گل</button>
+      <button class="snav-btn" onclick="document.getElementById('sec-ref-table').scrollIntoView({behavior:'smooth'})">📊 جدول مرجع pH</button>
+    </div>
+
+    <div id="sec-morning" class="divider"><div class="divider-line"></div><div class="divider-label" style="color:var(--gold)">🌅 شروع قلیایی روز</div><div class="divider-line"></div></div>
+    
+    <div class="card gold">
+      <div class="card-header"><div class="card-icon">🍋</div><div><div class="card-title">لیمو ترش + روغن زیتون</div><div class="card-subtitle">قوی‌ترین شروع قلیایی روز و سم‌زدایی ممتاز کبد</div></div></div>
+      <div class="recipe">
+        <div class="recipe-title">طرز تهیه متعادل</div>
+        <ul class="ingredient-list">
+          <li><span class="ing-name">آب ولرم (زیر ۴۰ درجه)</span><span class="ing-note">یک لیوان (نه سرد، نه جوش)</span></li>
+          <li><span class="ing-name">لیمو ترش تازه</span><span class="ing-note">آب نصف تا یک عدد (فوری مصرف شود)</span></li>
+          <li><span class="ing-name">روغن زیتون بکر</span><span class="ing-note">یک قاشق چای‌خوری (Cold-Pressed)</span></li>
+          <li><span class="ing-name">زنجبیل (اختیاری)</span><span class="ing-note">۲ برش تازه یا کمی پودر جهت دوچندان کردن قدرت هضم</span></li>
+        </ul>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">۱</div><div class="step-text">آب ولرم، لیمو و روغن زیتون را کاملاً مخلوط کنید.</div></div>
+        <div class="step"><div class="step-num">۲</div><div class="step-text">ناشتا بنوشید و حداقل تا ۲۰ دقیقه بعد از آن چیزی میل نکنید.</div></div>
+      </div>
+    </div>
+
+    <div id="sec-electrolyte" class="divider"><div class="divider-line"></div><div class="divider-label" style="color:var(--blue)">🌙 الکترولیت و خواب</div><div class="divider-line"></div></div>
+    
+    <div class="card blue">
+      <div class="card-header"><div class="card-icon">🧂</div><div><div class="card-title">نمک دریایی قبل از خواب</div><div class="card-subtitle">تأمین الکترولیت شبانه جهت تجربه خواب عمیق سلولی</div></div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">۱</div><div class="step-text">یک ساعت قبل از مسواک زدن: <strong>۲ تا ۳ دانه نمک هیمالیا یا نمک دریایی خام</strong> روی زبان قرار داده و با یک جرعه آب ولرم قورت دهید.</div></div>
+        <div class="step"><div class="step-num">۲</div><div class="step-text">بعد از مسواک زدن به هیچ وجه حتی نمک هم مصرف نکنید.</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag tag-b">جبران تعریق شبانه</span>
+        <span class="tag tag-b">تنظیم آلدوسترون</span>
+        <span class="tag tag-b">کاهش بیداری‌های شبانه</span>
+      </div>
+      <div class="alert alert-gold"><span class="alert-icon">💡</span>شواهد تجربی بسیار مفیدی دارد. در صورت وجود سابقه فشار خون بالا با پزشک مشورت شود.</div>
+    </div>
+
+    <div id="sec-baking" class="divider"><div class="divider-line"></div><div class="divider-label" style="color:var(--teal)">🍶 پروتکل‌های اسیدی-قلیایی ویژه</div><div class="divider-line"></div></div>
+    
+    <div class="card teal">
+      <div class="card-header"><div class="card-icon">🫧</div><div><div class="card-title">جوش شیرین (تعدیل اضطراری pH)</div><div class="card-subtitle">پروتکل کوتاه مدت بازگرداندن قلیایی بدن</div></div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">۱</div><div class="step-text">یک‌چهارم قاشق چای‌خوری جوش شیرین خالص را در یک لیوان آب حل کنید.</div></div>
+        <div class="step"><div class="step-num">۲</div><div class="step-text">در دوره‌های حداکثر ۵ تا ۷ روزه مصرف شود (مصرف مداوم ممنوع).</div></div>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-header"><div class="card-icon">🍶</div><div><div class="card-title">سرکه سیب طبیعی (ACV)</div><div class="card-subtitle">اسیدی در دهان، قلیایی قدرتمند بعد از هضم در کبد</div></div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">۱</div><div class="step-text">یک قاشق غذاخوری سرکه سیب ارگانیک (دارای رشته‌های مادر) را در نصف لیوان آب ولرم حل کنید.</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag tag-g">۲۰ دقیقه بعد از غذا ✅</span>
+        <span class="tag tag-g">ناشتا (فقط برای برخی معده‌ها) ✅</span>
+        <span class="tag tag-r">بلافاصله بعد غذا ❌</span>
+        <span class="tag tag-r">بلافاصله قبل مسواک ❌</span>
+      </div>
+    </div>
+
+    <div id="sec-eggs" class="divider"><div class="divider-line"></div><div class="divider-label" style="color:var(--purple)">🍳 بررسی پروتئین پایه (تخم‌مرغ)</div><div class="divider-line"></div></div>
+    
+    <div class="card purple">
+      <div class="card-header"><div class="card-icon">🥚</div><div><div class="card-title">تخم‌مرغ (پروتئین معتدل و غنی)</div><div class="card-subtitle">هم‌افزایی بیولوژیکی و مصلحات هضم</div></div></div>
+      <div class="recipe">
+        <div class="recipe-title">بهترین ترکیب‌های هم‌افزا</div>
+        <ul class="ing-list">
+          <li><span class="ing-name">تخم‌مرغ + آووکادو</span><span class="ing-note">← چربی سالم + پروتئین = چگالی انرژی پایدار ۴ الی ۵ ساعته</span></li>
+          <li><span class="ing-name">تخم‌مرغ + نان سبوس‌دار</span><span class="ing-note">← کربوهیدرات پیچیده + پروتئین = صبحانه متعادل ژنتیکی</span></li>
+          <li><span class="ing-name">تخم‌مرغ + پنیر + گردو</span><span class="ing-note">← چربی سالم امگا ۳ به همراه کلسیم و پروتئین کامل</span></li>
+        </ul>
+      </div>
+      <div class="recipe">
+        <div class="recipe-title">ترکیب‌های ناسازگار (بار سنگین گوارشی)</div>
+        <ul class="ing-list">
+          <li><span class="ing-name">تخم‌مرغ + شیر پرچرب</span><span class="ing-note">← هضم فوق‌العاده کند و ایجاد بار سنگین روی کبد</span></li>
+          <li><span class="ing-name">تخم‌مرغ + گوشت قرمز</span><span class="ing-note">← پروتئین مضاعف که کلیه و کبد را دچار خستگی سلولی می‌کند</span></li>
+          <li><span class="ing-name">تخم‌مرغ + چای سیاه</span><span class="ing-note">← تانن چای جذب آهن تخم مرغ را تا ۶۰٪ سرکوب می‌کند (حداقل یک ساعت فاصله)</span></li>
+        </ul>
+      </div>
+      <div class="alert alert-g">
+        <span class="alert-icon">✅</span>
+        <div><strong>نکته طلایی:</strong> برای کاهش اثر اسیدی تخم‌مرغ، همیشه آن را با سبزیجات قلیایی (اسفناج، خیار، گوجه) و افزودن زردچوبه میل کنید. بهترین حالت مصرف: ۲ عدد آب‌پز نرم عسلی + اسفناج بخارپز.</div>
+      </div>
+    </div>
+
+    <div id="sec-interstitium" class="divider"><div class="divider-line"></div><div class="divider-label" style="color:var(--cool)">🧬 سیستم بافتی Interstitium</div><div class="divider-line"></div></div>
+    
+    <div class="card cool">
+      <div class="card-header"><div class="card-icon">🧬</div><div><div class="card-title">مایع بافتی اینترستیشیوم</div><div class="card-subtitle">بزرگ‌ترین ارگان پنهان بدن و شاهراه اصلی سیستم ایمنی</div></div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">۱</div><div class="step-text"><strong>آب‌رسانی عمیق:</strong> کمبود آب فوراً این مایع را غلیظ و اسیدی کرده و انتقال اکسیژن را مختل می‌کند.</div></div>
+        <div class="step"><div class="step-num">۲</div><div class="step-text"><strong>تنفس عمیق (یوگا/کیریا):</strong> با خروج دی‌اکسید کربن، pH این ارگان فوراً قلیایی می‌شود.</div></div>
+        <div class="step"><div class="step-num">۳</div><div class="step-text"><strong>حرکت فاشیا (حرکات کششی):</strong> فاشیا و اینترستیشیوم به صورت مستقیم با حرکت هم‌بند احیا می‌شوند.</div></div>
+        <div class="step"><div class="step-num">۴</div><div class="step-text"><strong>حذف قندهای صنعتی:</strong> قند بیشترین اسیدیته بافتی را ایجاد می‌کند.</div></div>
+      </div>
+      <div class="recipe">
+        <div class="recipe-title">قلیایی‌کننده‌های برتر بافتی</div>
+        <ul class="ing-list">
+          <li><span class="ing-name">جعفری تازه</span><span class="ing-note">← برترین و قوی‌ترین قلیایی‌کننده بافتی سلولی</span></li>
+          <li><span class="ing-name">خیار + آب لیمو تازه</span><span class="ing-note">← هیدراتاسیون عمیق ساختار فاشیا</span></li>
+          <li><span class="ing-name">آب زنجبیل + نعناع</span><span class="ing-note">← دمنوش فوق‌العاده قوی جهت حرکت اینترستیشیوم</span></li>
+        </ul>
+      </div>
+      <div class="alert alert-p">
+        <span class="alert-icon">🧘</span>
+        <div>تطابق کامل با سیستم تمرینی شما: ترکیب <strong>تنفس عمیق + حرکت فاشیا + تغذیه قلیایی</strong> سریع‌ترین راه قلیایی‌سازی مایع بافتی است که در سیستم‌های سوماتیك و کیریا روتین شما وجود دارد.</div>
+      </div>
+    </div>
+
+    <div id="sec-pollen" class="divider"><div class="divider-line"></div><div class="divider-label" style="color:var(--gold)">🐝 سوپرفود الحاقی ممتاز</div><div class="divider-line"></div></div>
+    
+    <div class="card gold">
+      <div class="card-header"><div class="card-icon">🐝</div><div><div class="card-title">گرده گل (Bee Pollen)</div><div class="card-subtitle">کامل‌ترین سوپرفود بیولوژیک طبیعت و بمب انرژی قلیایی</div></div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">۱</div><div class="step-text"><strong>پروفایل بیوشیمیایی فوق‌العاده:</strong> حاوی بیش از ۲۵۰ ماده فعال بیولوژیکی، تمامی اسیدهای آمینه ضروری، آنزیم‌های زنده گوارشی و غنی‌ترین منبع طبیعی از ویتامین‌های گروه B (مخصوصاً B1, B2, B3, B5, B6 و اسید فولیک).</div></div>
+        <div class="step"><div class="step-num">۲</div><div class="step-text"><strong>اثر قلیایی مستقیم:</strong> با بهبود عملکرد کبد و بهینه‌سازی ترشح آنزیم‌های گوارشی، اسیدیته کل بدن را به شدت کاهش داده و سیستم بافتی را متعادل می‌کند.</div></div>
+        <div class="step"><div class="step-num">۳</div><div class="step-text"><strong>تقویت سیتوکروم و کلاژن:</strong> آنتی‌اکسیدان‌های خاص آن از پیری فاشیا جلوگیری کرده و هماهنگی عصبی-عضلانی را در حرکات قدرتی ارتقا می‌دهند.</div></div>
+      </div>
+      <div class="recipe">
+        <div class="recipe-title">پروتکل مصرف بیولوژیک</div>
+        <ul class="ing-list">
+          <li><span class="ing-name">دوز شروع</span><span class="ing-note">یک‌چهارم قاشق چای‌خوری (جهت تست آلرژی احتمالی)</span></li>
+          <li><span class="ing-name">دوز استاندارد روزانه</span><span class="ing-note">۱ قاشق مرباخوری تا ۱ قاشق غذاخوری برای افراد فعال</span></li>
+          <li><span class="ing-name">بهترین زمان مصرف</span><span class="ing-note">صبح ناشتا؛ به صورت مکیدنی زیر زبان (جذب سریع عروقی) یا مخلوط در آب ولرم و عسل طبیعی (زیر ۴۰ درجه)</span></li>
+        </ul>
+      </div>
+      <div class="alert alert-g">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>ممنوعیت قطعیت:</strong> افرادی که سابقه حساسیت شدید به نیش زنبور یا آلرژی‌های حاد تنفسی به گرده گیاهان دارند، باید با احتیاط شدید یا زیر نظر پزشک مصرف کنند. هرگز گرمای بالای ۴۰ درجه به آن ندهید زیرا آنزیم‌های زنده آن کاملاً نابود می‌شوند.</div>
+      </div>
+      <div class="tags">
+        <span class="tag tag-g">بمب ویتامین B</span>
+        <span class="tag tag-g">تقویت فاشیا</span>
+        <span class="tag tag-gold">آنزیم زنده گوارشی</span>
+      </div>
+    </div>
+
+    <div id="sec-ref-table" class="divider"><div class="divider-line"></div><div class="divider-label" style="color:var(--green)">📊 جدول مرجع کامل pH خوراکی‌ها</div><div class="divider-line"></div></div>
+    
+    <div class="card green">
+      <div class="card-header"><div class="card-icon">📋</div><div><div class="card-title">تمام مقادیر هضم در یک نگاه</div><div class="card-subtitle">از بالاترین سطح قلیایی تا اسیدی‌ترین عناصر بافتی</div></div></div>
+      <table class="comp-table">
+        <tr><th>خوراکی / عنصر</th><th>اثر نهایی pH</th><th>بهترین زمان و نحوه مصرف پیشنهادی</th></tr>
+        <tr><td>🌿 جعفری / اسفناج تازه</td><td><span class="good">+۷ تا +۹ (قلیایی عالی)</span></td><td>همراه وعده‌های غذایی اسیدی و به صورت اسموتی سبیز</td></tr>
+        <tr><td>🌿 میخک ارگانیک</td><td><span class="good">+۸ تا +۹ (فوق قلیایی)</span></td><td>دم کردن ۲ دانه در چای یا قهوه جهت تعدیل اسیدیته آن‌ها</td></tr>
+        <tr><td>🌸 زعفران ایرانی</td><td><span class="good">+۶ تا +۷</span></td><td>صبح یا عصرانه به همراه دمنوش‌های معتدل</td></tr>
+        <tr><td>🍋 آب لیمو ترش تازه</td><td><span class="good">+۶ (بعد از هضم کبد)</span></td><td>صبح ناشتا در یک لیوان آب ولرم</td></tr>
+        <tr><td>🥒 خیار تازه بوته‌ای</td><td><span class="good">+۸</span></td><td>میان‌وعده عالی جهت هیدراتاسیون بافت فاشیا</td></tr>
+        <tr><td>🌱 زنجبیل تازه</td><td><span class="good">+۳ تا +۴</span></td><td>به صورت دمنوش بعد از وعده‌های سنگین پروتئینی</td></tr>
+        <tr><td>🌿 دمنوش نعناع خالص</td><td><span class="good">+۴</span></td><td>۳۰ دقیقه بعد از ناهار جهت تخلیه سریع معده</td></tr>
+        <tr><td>🥑 آووکادو چرب</td><td><span class="good">+۵.۵</span></td><td>وعده صبحانه همراه با تخم‌مرغ عسلی</td></tr>
+        <tr><td>🍇 مویز سیاه سایه‌خشک</td><td><span class="good">+۴ تا +۵</span></td><td>ناشتا یا میان‌وعده ورزشی صبحگاهی</td></tr>
+        <tr><td>🍇 مویز سبز</td><td><span class="good">+۳ تا +۴</span></td><td>به همراه مغز بادام خیس خورده</td></tr>
+        <tr><td>🌱 چای ماچا ارگانیک</td><td><span class="good">+۲</span></td><td>صبح‌ها یا نیم ساعت قبل از تمرینات سوماتیك</td></tr>
+        <tr><td>🌰 بادام درختی (پوست‌کنده)</td><td><span class="good">+۳</span></td><td>خیس‌خورده در آب به مدت ۱۲ ساعت (مصرف ناشتا)</td></tr>
+        <tr><td>🪨 مغز گردو تازه</td><td><span class="good">+۲ تا +۳</span></td><td>همراه با پنیر طبیعی در وعده شام جهت خنثی‌سازی اسید</td></tr>
+        <tr><td>🥚 تخم‌مرغ کامل</td><td><span class="neutral">−۲ (کمی اسیدی)</span></td><td>آب‌پز عسلی نرم در صبحانه به همراه مصلحات سبزیجات</td></tr>
+        <tr><td>🍎 سیب درختی کامل</td><td><span class="good">+۳ تا +۴</span></td><td>بهترین میان‌وعده معتدل برای تمام فصول و مزاج‌ها</td></tr>
+        <tr><td>🥕 هویج فرنگی/ایرانی</td><td><span class="good">+۵</span></td><td>پخته یا خام جهت تعدیل ترشحات معده</td></tr>
+        <tr><td>🌾 جو دوسر (اوتمیل)</td><td><span class="good">+۲</span></td><td>پایه عالی کربوهیدراتی برای صبحانه قلیایی</td></tr>
+        <tr><td>🥩 گوشت قرمز گوسفندی</td><td><span class="bad">−۸ (اسیدی سنگین)</span></td><td>حتماً با سماق فراوان، پیاز و سبزیجات مصرف شود</td></tr>
+        <tr><td>🍦 ماست پرچرب پاستوریزه</td><td><span class="bad">−۴ (اسیدی)</span></td><td>در فصول سرد مصرف آن بدون مصلح (زنیان/گردو) محدود شود</td></tr>
+        <tr><td>☕ قهوه اسپرسو / دمی</td><td><span class="bad">−۳ (اسیدی بافتی)</span></td><td>همراه با هل یا میخک مصرف شود؛ ناشتا مصرف نشود</td></tr>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="tab-panel" id="t2">
+    <div class="spice-grid">
+      
+      <div class="card green">
+        <div class="card-header"><div class="card-icon">🟤</div><div><div class="card-title">شنبلیله</div><div class="card-subtitle">Trigonella foenum-graecum</div></div></div>
+        <div class="spice-badges"><span class="sb sb-ph-g">pH: +۴ تا +۵</span><span class="sb sb-warm">گرم درجه ۲</span></div>
+        <div class="vpill vB">B Complex ⭐⭐</div>
+        <div class="spice-props">حاوي ماده بیولوژیک <strong>فنوگریکین</strong> جهت تنظیم دقیق قند خون و ترشح هورمون‌های انسولینی.</div>
+        <div class="spice-use">کاربرد پایه: در خورشت قورمه‌سبزی و سوپ‌های قلیایی‌کننده.</div>
+      </div>
+
+      <div class="card green">
+        <div class="card-header"><div class="card-icon">🟤</div><div><div class="card-title">زیره سبز</div><div class="card-subtitle">Cuminum cyminum</div></div></div>
+        <div class="spice-badges"><span class="sb sb-ph-g">pH: +۳</span><span class="sb sb-warm">گرم درجه ۲</span></div>
+        <div class="vpill vB">B1, B2, B3 ⭐⭐</div>
+        <div class="spice-props">دارای <strong>تیمول</strong> طبیعی جهت تسریع هضم پروتئین‌ها و رفع فوری نفخ فاشیا و روده.</div>
+        <div class="spice-use">بهترین مصرف: در برنج، آبگوشت و همراه با لبنیات سرد.</div>
+      </div>
+
+      <div class="card cool">
+        <div class="card-header"><div class="card-icon">🔴</div><div><div class="card-title">سماق خالص</div><div class="card-subtitle">Rhus coriaria</div></div></div>
+        <div class="spice-badges"><span class="sb sb-ph-g">pH: +۴</span><span class="sb sb-cool">سرد درجه ۲</span></div>
+        <div class="vpill vC">Vitamin C ⭐⭐⭐</div>
+        <div class="spice-props">سرشار از <strong>اسید مالیک</strong> خنثی‌کننده اوره و چربی‌های سنگین حیوانی.</div>
+        <div class="spice-use">کاربرد حیاتی: پاشیدن روی کباب کوبیده و گوشت قرمز جهت مهار اسید.</div>
+      </div>
+
+      <div class="card cool">
+        <div class="card-header"><div class="card-icon">🌸</div><div><div class="card-title">گلاب دوآتشه</div><div class="card-subtitle">Rosa damascena</div></div></div>
+        <div class="spice-badges"><span class="sb sb-ph-g">pH: +۳</span><span class="sb sb-cool">سرد درجه ۱</span></div>
+        <div class="vpill vMin">Flavonoids ⭐⭐</div>
+        <div class="spice-props">آنتی‌اکسیدان بسیار قوی سیستم عصبی؛ آرام‌بخش مستقیم تونوس عضلانی و کاهش‌دهنده استرس بافتی.</div>
+        <div class="spice-use">استفاده در دسرها، شربت زعفران و بوییدن قبل خواب.</div>
+      </div>
+
+      <div class="card gold">
+        <div class="card-header"><div class="card-icon">🟡</div><div><div class="card-title">بهارنارنج</div><div class="card-subtitle">Citrus aurantium</div></div></div>
+        <div class="spice-badges"><span class="sb sb-ph-g">pH: +۳</span><span class="sb sb-warm">گرم درجه ۱</span></div>
+        <div class="vpill vC">Naringenin ⭐⭐</div>
+        <div class="spice-props">تقویت‌کننده قوی قلب و ضد اضطراب مزمن؛ تعدیل‌کننده عالی سیستم پاراسمپاتیک.</div>
+        <div class="spice-use">به صورت دمنوش شبانه یا عرق در شربت عسل.</div>
+      </div>
+
+      <div class="card cool">
+        <div class="card-header"><div class="card-icon">🟤</div><div><div class="card-title">زردآلو خشک (آلوچه خورشتی)</div><div class="card-subtitle">Prunus armeniaca</div></div></div>
+        <div class="spice-badges"><span class="sb sb-ph-g">pH: +۳</span><span class="sb sb-cool">سرد درجه ۱</span></div>
+        <div class="vpill vA">Vit A ⭐⭐</div><div class="vpill vB">B3 ⭐</div>
+        <div class="spice-props">فیبر غنی پکتین جهت بهبود حرکات دودی روده و پاکسازی اسیدهای صفراوی پسماند.</div>
+        <div class="spice-use">مصرف در خورشت آلو و میان‌وعده‌های قلیایی.</div>
+      </div>
+
+      <div class="card cool">
+        <div class="card-header"><div class="card-icon">🌿</div><div><div class="card-title">نعناع خشک</div><div class="card-subtitle">Mentha piperita</div></div></div>
+        <div class="spice-badges"><span class="sb sb-ph-g">pH: +۴</span><span class="sb sb-cool">سرد درجه ۱</span></div>
+        <div class="vpill vA">Vit A ⭐⭐</div><div class="vpill vC">Vit C ⭐</div>
+        <div class="spice-props">دارای <strong>منتول</strong> بازکننده مجاری تنفسی و شل‌کننده انقباضات دیواره معده.</div>
+        <div class="spice-use">مخلوط با ماست، دوغ و به صورت دمنوش ضد نفخ.</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="tab-panel" id="t3">
+    <div class="alert alert-g"><span class="alert-icon">💡</span>قانون طلایی میوه‌ها: میوه‌ها اسیدهای آلی ضعیف دارند که در دهان اسید خفیف نشان می‌دهند، اما پس از سوخت‌وساز در کبد، خاکستر فوق‌العاده قلیایی از خود بر جای می‌گذارند. همیشه به صورت جداگانه مصرف شوند.</div>
+    
+    <div class="fruit-grid">
+      
+      <div class="fruit-card n">
+        <span class="fruit-emoji">🍎</span>
+        <div class="fruit-name">سیب درختی</div>
+        <span class="fruit-ph">pH: +۳ تا +۴</span>
+        <div class="fruit-note">معتدل بیولوژیک. سرشار از پکتین برای سلامت مخاط روده.</div>
+        <div class="fruit-best">✅ صبح ناشتا یا عصرانه</div>
+      </div>
+
+      <div class="fruit-card c">
+        <span class="fruit-emoji">🍌</span>
+        <div class="fruit-name">موز رسیده‌</div>
+        <span class="fruit-ph">pH: +۳ تا +۴</span>
+        <div class="fruit-note">سرد درجه ۱. پتاسیم بسیار بالا. سردمزاجان با دارچین بخورند.</div>
+        <div class="fruit-best">✅ نیم ساعت قبل از تمرین</div>
+      </div>
+
+      <div class="fruit-card c">
+        <span class="fruit-emoji">🍉</span>
+        <div class="fruit-name">هندوانه</div>
+        <span class="fruit-ph">pH: +۶ (فوق قلیایی)</span>
+        <div class="fruit-note">سرد درجه ۳. آب‌رسانی خالص سلولی. حتماً کاملاً تنها مصرف شود.</div>
+        <div class="fruit-best">✅ بین وعده‌های غذایی اصلی</div>
+      </div>
+
+      <div class="fruit-card c">
+        <span class="fruit-emoji">🍊</span>
+        <div class="fruit-name">پرتقال شیرین</div>
+        <span class="fruit-ph">pH: +۴ تا +۵</span>
+        <div class="fruit-note">سرد درجه ۱. سرشار از ویتامین C. با معده کاملاً خالی مصرف نشود.</div>
+        <div class="fruit-best">✅ اواسط روز</div>
+      </div>
+
+      <div class="fruit-card c">
+        <span class="fruit-emoji">🍋</span>
+        <div class="fruit-name">لیمو ترش تازه</div>
+        <span class="fruit-ph">pH: +۶ (بالاترین اثر کبد)</span>
+        <div class="fruit-note">در دهان اسیدی، در کبد تبدیل به قوی‌ترین قلیایی‌کننده ارگانیک می‌شود.</div>
+        <div class="fruit-best">✅ صبح ناشتا در آب ولرم</div>
+      </div>
+
+      <div class="fruit-card c">
+        <span class="fruit-emoji">🍇</span>
+        <div class="fruit-name">انگور شیرین</div>
+        <span class="fruit-ph">pH: +۳ تا +۴</span>
+        <div class="fruit-note">سرد درجه ۱. حاوی رسوراترول ضد پیری فاشیا. قند بالایی دارد.</div>
+        <div class="fruit-best">✅ طول روز (نه اواخر شب)</div>
+      </div>
+
+      <div class="fruit-card c">
+        <span class="fruit-emoji">Pear 🍐</span>
+        <div class="fruit-name">گلابی شیرین</div>
+        <span class="fruit-ph">pH: +۳</span>
+        <div class="fruit-note">سرد درجه ۲. تسکین‌دهنده عالی صفرا و آنزیم‌های حاد کبد.</div>
+        <div class="fruit-best">✅ صبح‌ها همراه زنجبیل</div>
+      </div>
+
+      <div class="fruit-card w">
+        <span class="fruit-emoji">🍑</span>
+        <div class="fruit-name">هلو زعفرانی</div>
+        <span class="fruit-ph">pH: +۲ تا +۳</span>
+        <div class="fruit-note">گرم درجه ۱. محرک ترشح ادرار قلیایی و پاکسازی کلیه‌ها.</div>
+        <div class="fruit-best">✅ میان‌وعده اواسط روز</div>
+      </div>
+
+      <div class="fruit-card w">
+        <span class="fruit-emoji">🍒</span>
+        <div class="fruit-name">گیلاس رسیده‌</div>
+        <span class="fruit-ph">pH: +۳</span>
+        <div class="fruit-note">گرم درجه ۱. حاوی ملاتونین طبیعی جهت فاز ریکاوری سیستم عصبی.</div>
+        <div class="fruit-best">✅ عصرها ۲ ساعت قبل خواب</div>
+      </div>
+
+      <div class="fruit-card c">
+        <span class="fruit-emoji">🫐</span>
+        <div class="fruit-name">بلوبری / زغال‌اخته</div>
+        <span class="fruit-ph">pH: +۳</span>
+        <div class="fruit-note">سرد درجه ۱. بالاترین سطح آنتی‌اکسیدان آنتوسیانین جهت ترمیم عروق.</div>
+        <div class="fruit-best">✅ میان‌وعده به همراه عسل</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="tab-panel" id="t4">
+    
+    <div class="card purple">
+      <div class="card-header"><div class="card-icon">🎯</div><div><div class="card-title">ترکیب‌های هم‌افزای طب سنتی و مدرن</div><div class="card-subtitle">روش‌های موازنه دقیق انرژی و آنزیم‌ها</div></div></div>
+      <div class="recipe">
+        <div class="recipe-title">ترکیب‌های معتدل‌کننده برتر</div>
+        <ul class="ing-list">
+          <li><span class="ing-name">ماست + گردو + عسل</span><span class="ing-note">← سرد + گرم + گرم = تعادل کامل پاشش کلسیم بدون انقباض گوارشی</span></li>
+          <li><span class="ing-name">هندوانه + کمی نمک دریایی</span><span class="ing-note">← سردی مفرط درجه ۳ هندوانه با سدیم خنثی و گرم می‌شود</span></li>
+          <li><span class="ing-name">خیار + نمک + گلاب</span><span class="ing-note">← رفع فوری اسپاسم معده ناشی از سردی آب خیار</span></li>
+          <li><span class="ing-name">اسفناج + سیر + روغن زیتون</span><span class="ing-note">← بهترین هضم آهن گیاهی با فعال‌سازی سیر گرم</span></li>
+          <li><span class="ing-name">چای سبز + زنجبیل + عسل</span><span class="ing-note">← نوشیدنی آنتی‌اکسیدانی معتدل بدون ایجاد سردی عصب</span></li>
+        </ul>
+      </div>
+      
+      <div class="recipe" style="margin-top:12px;">
+        <div class="recipe-title">ترکیب‌های ممنوعه قطعی (تولید سموم بیولوژیک)</div>
+        <ul class="ing-list">
+          <li><span class="ing-name">ماست + خیار + هندوانه</span><span class="ing-note">← تجمع سه ماده با سردی بالا = افت شدید پتانسیل الکتریکی معده</span></li>
+          <li><span class="ing-name">شیر + ماهی تازه</span><span class="ing-note">← دو پروتئین با ساختار اسید‌آمینه کاملاً متضاد = ایجاد گازهای سمی حاد کبد</span></li>
+          <li><span class="ing-name">عسل + کره صنعتی</span><span class="ing-note">← تداخل شدید قند ساده با چربی اشباع = اختلال آنزیمی صفرا</span></li>
+          <li><span class="ing-name">میوه بلافاصله بعد غذا</span><span class="ing-note">← قند فرکتوز پشت سد پروتئین غذا مانده و فوری تخمیر و اسیدی می‌شود</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="tab-panel" id="t5">
+    <div class="card green">
+      <div class="card-header"><div class="card-icon">💊</div><div><div class="card-title">راهنمای نشانگرهای بیولوژیک (V-Pills)</div><div class="card-subtitle">ویتامین‌های کلیدی موجود در مصلحات فوق</div></div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">A</div><div class="step-text"><strong>ویتامین A (بتاکاروتن):</strong> محافظت عمیق از بافت‌های مخاطی روده و معده در برابر اسید.</div></div>
+        <div class="step"><div class="step-num">B</div><div class="step-text"><strong>ویتامین‌های گروه B:</strong> کاتالیزور اصلی سیستم عصبی و آزادسازی سموم سلولی (غنی در گرده گل).</div></div>
+        <div class="step"><div class="step-num">C</div><div class="step-text"><strong>ویتامین C (اسید اسکوربیک):</strong> قلیایی‌کننده نهایی بافت پس از سنتز کبد و بازسازی فاشیا.</div></div>
+        <div class="step"><div class="step-num">M</div><div class="step-text"><strong>املاح معدنی (منیزیم/پتاسیم):</strong> پمپ قلیایی سلول جهت خروج اسید لاکتیک از اینترستیشیوم.</div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="tab-panel" id="t6">
+    <div class="timeline">
+      
+      <div class="tl-item">
+        <div class="tl-dot">🌅</div>
+        <div class="tl-content">
+          <div class="tl-time">ساعت ۰۶:۰۰ تا ۰۶:۳۰ — ناشتا اول صبح</div>
+          <div class="tl-desc">یک لیوان آب ولرم + لیمو ترش تازه + ۱ قاشق چای‌خوری روغن زیتون بکر. (Detox مستقیم کبد).</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">🐝</div>
+        <div class="tl-content">
+          <div class="tl-time">ساعت ۰۶:۴۵ — پروتکل انرژی سلولی</div>
+          <div class="tl-desc">یک قاشق مرباخوری گرده گل به صورت مکیدنی زیر زبان جهت جذب فوری بیوتین و ب‌کمپلکس زنده گوارشی.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">🍳</div>
+        <div class="tl-content">
+          <div class="tl-time">ساعت ۰۷:۳۰ — صبحانه ارگانیک پایه</div>
+          <div class="tl-desc">تخم‌مرغ آب‌پز نرم عسلی همراه با مصلح زردچوبه و سبزیجات برگ سبز (اسفناج).</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">⏱️</div>
+        <div class="tl-content">
+          <div class="tl-time">۲۰ دقیقه بعد از وعده‌های اصلی (ناهار/شام)</div>
+          <div class="tl-desc">یک قاشق سرکه سیب طبیعی در نصف لیوان آب ولرم جهت مهار پاسخ انسولینی و قلیایی‌سازی خاکستر هضم کبد.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">🦷</div>
+        <div class="tl-content">
+          <div class="tl-time">پروتکل طلایی دندان (بلافاصله پس از اسیدها)</div>
+          <div class="tl-desc">بعد از لیمو یا سرکه سیب هرگز فوری مسواک نزنید! ابتدا چند تکه پنیر طبیعی را در دهان بچرخانید (بازسازی کلسیم/کازئین مینا)، ۳۰ دقیقه صبر کنید تا pH بزاق معتدل شود، سپس مسواک بزنید.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">🌙</div>
+        <div class="tl-content">
+          <div class="tl-time">ساعت ۲۲:۰۰ — یک ساعت قبل خواب</div>
+          <div class="tl-desc">۲ الی ۳ دانه نمک هیمالیا ارگانیک روی زبان + یک جرعه آب ولرم جهت تنظیم هورمون آلدوسترون و خواب عمیق.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="t1"><span class="tab-icon">⚗️</span><span class="tab-label">pH و هضم</span></button>
+  <button class="tab-btn" data-tab="t2"><span class="tab-icon">🌿</span><span class="tab-label">ادویه‌ها</span></button>
+  <button class="tab-btn" data-tab="t3"><span class="tab-icon">🍎</span><span class="tab-label">میوه‌ها</span></button>
+  <button class="tab-btn" data-tab="t4"><span class="tab-icon">🌡️</span><span class="tab-label">طب سنتی</span></button>
+  <button class="tab-btn" data-tab="t5"><span class="tab-icon">💊</span><span class="tab-label">ویتامین‌ها</span></button>
+  <button class="tab-btn" data-tab="t6"><span class="tab-icon">🗓️</span><span class="tab-label">روتین زمان</span></button>
+</div>
+
+<script>
+// ══════════ PWA SERVICE WORKER REGISTRATION ══════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('Service Worker Registered Successfully!', reg.scope))
+      .catch(err => console.log('Service Worker Registration Failed!', err));
+  });
+}
+
+// ══════════ iOS NAVIGATION SYSTEM ══════════
+const tabBtns = document.querySelectorAll('.tab-bar .tab-btn');
+const tabPanels = document.querySelectorAll('.content-wrap .tab-panel');
+
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetTab = btn.getAttribute('data-tab');
+    
+    tabBtns.forEach(b => b.classList.remove('active'));
+    tabPanels.forEach(p => p.classList.remove('active'));
+    
+    btn.classList.add('active');
+    const targetPanel = document.getElementById(targetTab);
+    targetPanel.classList.add('active');
+    
+    // Smooth reset scroll position on tab change
+    window.scrollTo({top: 0, behavior: 'instant'});
+  });
+});
+
+// ══════════ ULTRA SEARCH ADVANCED SYSTEM ══════════
+const searchInput = document.querySelector('.search-input');
+const clearBtn = document.getElementById('clearBtn');
+const body = document.body;
+// Selecting all searchable card types
+const cards = document.querySelectorAll('.card, .fruit-card');
+
+function performSearch(query) {
+  query = query.trim().toLowerCase();
+  
+  if (!query) {
+    body.classList.remove('search-mode-active');
+    cards.forEach(c => {
+      c.classList.remove('search-hit');
+      c.style.display = '';
+    });
+    clearBtn.style.display = 'none';
+    return;
+  }
+  
+  clearBtn.style.display = 'block';
+  body.classList.add('search-mode-active');
+  
+  let firstMatchedPanel = null;
+  
+  cards.forEach(c => {
+    const contentText = c.textContent.toLowerCase();
+    if (contentText.includes(query)) {
+      c.classList.add('search-hit');
+      c.style.display = 'block';
+      
+      // Auto-identify which parent panel contains this hit
+      const parentPanel = c.closest('.tab-panel');
+      if (!firstMatchedPanel && parentPanel) {
+        firstMatchedPanel = parentPanel;
+      }
+    } else {
+      c.classList.remove('search-hit');
+      c.style.display = 'none';
+    }
+  });
+  
+  // Smart Feature: If a hit is found on another tab, automatically switch to it to show the user
+  if (firstMatchedPanel) {
+    const panelId = firstMatchedPanel.getAttribute('id');
+    tabPanels.forEach(p => p.classList.remove('active'));
+    tabBtns.forEach(b => b.classList.remove('active'));
+    
+    firstMatchedPanel.classList.add('active');
+    document.querySelector(`.tab-btn[data-tab="${panelId}"]`).classList.add('active');
+  }
+}
+
+searchInput.addEventListener('input', e => performSearch(e.target.value));
+
+clearBtn.addEventListener('click', () => {
+  searchInput.value = '';
+  performSearch('');
+  searchInput.focus();
+});
+</script>
+</body>
+</html>
